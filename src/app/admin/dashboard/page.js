@@ -19,7 +19,7 @@ export default function AdminDashboard() {
 
   const fetchAuctionDates = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/auction-dates");
+      const response = await fetch("https://mpb-web-production.up.railway.app/api/auction-dates");
       if (response.ok) {
         const data = await response.json();
         setAuctionDates(data);
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:4000/api/upload-market-report", {
+      const response = await fetch("https://mpb-web-production.up.railway.app/api/upload-market-report", {
         method: "POST",
         body: formData,
       });
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
   const handleAddAuction = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/api/auction-dates", {
+      const response = await fetch("https://mpb-web-production.up.railway.app/api/auction-dates", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,7 +102,7 @@ export default function AdminDashboard() {
 
   const handleDeleteAuction = async (id) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/auction-dates/${id}`, {
+      const response = await fetch(`https://mpb-web-production.up.railway.app/api/auction-dates/${id}`, {
         method: "DELETE",
       });
 
