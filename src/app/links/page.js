@@ -208,10 +208,10 @@ export default function LinksPage() {
         className="text-center max-w-3xl mx-auto mb-12"
       >
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-          Auction Performance Dashboard
+          MPBL Catalog Infomation Dashboard
         </h1>
         <p className="text-lg text-gray-600">
-          Data Source : Weekly Public Sale Bid History Data
+          Data Source : All Broker Catalog Data
         </p>
       </motion.div>
 
