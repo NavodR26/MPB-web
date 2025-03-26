@@ -15,6 +15,12 @@ const months = [
   { name: "April 2025", days: 30, startDay: 2 }, // April 2025 starts on Tuesday (2)
   { name: "May 2025", days: 31, startDay: 4 }, // May 2025 starts on Thursday (4)
   { name: "June 2025", days: 30, startDay: 0 }, // June 2025 starts on Sunday (0)
+  { name: "July 2025", days: 31, startDay: 2 },     // Tuesday
+  { name: "August 2025", days: 31, startDay: 5 },   // Friday
+  { name: "September 2025", days: 30, startDay: 1 },// Monday
+  { name: "October 2025", days: 31, startDay: 3 },  // Wednesday
+  { name: "November 2025", days: 30, startDay: 6 }, // Saturday
+  { name: "December 2025", days: 31, startDay: 1 }, // Monday
 ];
 
 export default function AuctionCalendar() {

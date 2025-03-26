@@ -237,7 +237,7 @@ export default function LinksPage() {
           </div>
           <div className={`w-full ${showFullDashboard ? 'h-screen' : 'h-96 md:h-[450px]'} transition-all duration-500`}>
             <iframe 
-              src="https://lookerstudio.google.com/embed/reporting/af28d8ff-e945-461d-bcd2-b2d02db35861/page/p_qxz3rkpaqd" 
+              src="https://lookerstudio.google.com/embed/reporting/7d03915b-bc05-4a8f-9a69-f462ee934ef1/page/7YW9E" 
               width="100%" 
               height="100%" 
               style={{ border: 0 }} 
