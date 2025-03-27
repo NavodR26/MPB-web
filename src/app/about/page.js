@@ -10,7 +10,7 @@ import { useInView } from "framer-motion";
 const management = [
   { 
     name: "Mr. Samantha Dodanwela", 
-    role: "Managing Director", 
+    role: "Chairman / Managing Director", 
     bio: "Over 25 years of experience in Tea Brokering. Serves in the Executive Committee of the Colombo Tea Traders' Association.", 
     image: "/management/samantha.jpg" 
   },

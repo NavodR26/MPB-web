@@ -487,7 +487,7 @@ export default function Layout({ children }) {
             </Link>
           </li>
           <li><Link href="/contactus" className="hover:text-white transition-colors duration-200">Contacts</Link></li>
-          <li><Link href="/terms" className="hover:text-white transition-colors duration-200">Notice Board</Link></li>
+          <li><Link href="/csr" className="hover:text-white transition-colors duration-200">CSR NEWS</Link></li>
           <li><Link href="/contactus" className="hover:text-white transition-colors duration-200">FAQ</Link></li>
           <li><Link href="/careers" className="hover:text-white transition-colors duration-200">Careers</Link></li>
         </ul>

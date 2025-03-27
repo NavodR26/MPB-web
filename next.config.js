@@ -1,22 +1,20 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    webpack: (config, { isServer }) => {
-      if (!isServer) {
-        config.resolve.fallback = {
-          dgram: false,
-          dns: false,
-          net: false,
-          tls: false,
-        };
-      }
-      return config;
-    },
-  };
-  
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   output: "export",
+//   webpack: (config, { isServer }) => {
+//     if (!isServer) {
+//       config.resolve.fallback = {
+//         dgram: false,
+//         dns: false,
+//         net: false,
+//         tls: false,
+//       };
+//     }
+//     return config;
+//   },
+// };
 
-  
-  module.exports = nextConfig;
-  
+// module.exports = nextConfig;
 
   // module.exports = {
   //   async headers() {
@@ -57,3 +55,43 @@ const nextConfig = {
 // const nextConfig = {};
 
 // export default nextConfig;
+
+
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//     webpack: (config, { isServer }) => {
+//       if (!isServer) {
+//         config.resolve.fallback = {
+//           dgram: false,
+//           dns: false,
+//           net: false,
+//           tls: false,
+//         };
+//       }
+//       return config;
+//     },
+//   };
+  
+  
+//   module.exports = nextConfig;
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export", // Enables static export
+  images: {
+    unoptimized: true, // Disables Image Optimization API
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        dgram: false,
+        dns: false,
+        net: false,
+        tls: false,
+      };
+    }
+    return config;
+  },
+};
+
+module.exports = nextConfig;
