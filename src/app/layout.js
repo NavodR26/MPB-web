@@ -457,8 +457,8 @@ export default function Layout({ children }) {
         <address className="not-italic text-gray-300 space-y-2">
           <p>133, Jawatta Road</p>
           <p>Colombo 05, Sri Lanka</p>
-          <p>Email: info@mpb.lk</p>
-          <p>Phone: +94 11 234 5678</p>
+          <p>Email: info@merctea.lk</p>
+          <p>Phone: 011 234 5678</p>
         </address>
       </div>
       <div>

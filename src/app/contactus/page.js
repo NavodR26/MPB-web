@@ -102,24 +102,24 @@ export default function ContactUs() {
     warehouse: {
       title: "Warehouse",
       address: "No. 220, Padiliyathuduwa Road, Enderamulla, Wattala",
-      phone: "+94112933410 / +94112981418",
+      phone: "0112 981 418",
       mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.35856532781!2d79.89483231539328!3d6.977803594951809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2597b5b5b5b5f%3A0x8b5b5b5b5b5b5b5b!2sPadiliyathuduwa%20Rd%2C%20Wattala!5e0!3m2!1sen!2slk!4v1631234567890!5m2!1sen!2slk"
     },
     sampleRoom: {
       title: "Sample Room",
       address: "No. 220/A/3B, Diyabubulawatta, Enderamulla, Wattala",
-      phone: "+94112943497",
+      phone: "0112 943 497",
       mapUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.35856532781!2d79.89483231539328!3d6.977803594951809!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2597b5b5b5b5f%3A0x8b5b5b5b5b5b5b5b!2sDiyabubulawatta%2C%20Wattala!5e0!3m2!1sen!2slk!4v1631234567890!5m2!1sen!2slk"
     }
   };
 
   // Business hours
   const businessHours = [
-    { day: "Monday", hours: "8:30 AM - 5:00 PM" },
-    { day: "Tuesday", hours: "8:30 AM - 5:00 PM" },
-    { day: "Wednesday", hours: "8:30 AM - 5:00 PM" },
-    { day: "Thursday", hours: "8:30 AM - 5:00 PM" },
-    { day: "Friday", hours: "8:30 AM - 4:30 PM" },
+    { day: "Monday", hours: "9:00 AM - 5:00 PM" },
+    { day: "Tuesday", hours: "9:00 AM - 5:00 PM" },
+    { day: "Wednesday", hours: "9:00 AM - 5:00 PM" },
+    { day: "Thursday", hours: "9:00 AM - 5:00 PM" },
+    { day: "Friday", hours: "9:00 AM - 5:00 PM" },
     { day: "Saturday", hours: "Closed" },
     { day: "Sunday", hours: "Closed" }
   ];
@@ -197,7 +197,7 @@ export default function ContactUs() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <a href="mailto:info@mercantilebrokers.lk" className="hover:text-green-600 transition duration-300">info@mercantilebrokers.lk</a>
+                <a href="mailto:info@merctea.lk" className="hover:text-green-600 transition duration-300">info@merctea.lk</a>
               </div>
               
               <div className="flex items-center mb-4 text-gray-700">
@@ -210,7 +210,7 @@ export default function ContactUs() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <a href="tel:+94112581358" className="hover:text-green-600 transition duration-300">+94 11 258 1358</a>
+                <a href="tel:+94112581358" className="hover:text-green-600 transition duration-300"> 011 258 1358</a>
               </div>
             </motion.div>
 
@@ -562,7 +562,7 @@ export default function ContactUs() {
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.784 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
                 ),
-                url: "https://www.linkedin.com/company/mercantilebrokers/",
+                url: "https://www.linkedin.com/company/merctea/",
                 color: "bg-blue-500 hover:bg-blue-600"
               },
             ].map((social, index) => (
