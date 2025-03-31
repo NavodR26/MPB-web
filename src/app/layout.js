@@ -486,9 +486,9 @@ export default function Layout({ children }) {
               <span className="font-semibold">Login</span>
             </Link>
           </li>
+          <li><Link href="/gallery" className="hover:text-white transition-colors duration-200">Gallery</Link></li>
           <li><Link href="/contactus" className="hover:text-white transition-colors duration-200">Contacts</Link></li>
           <li><Link href="/csr" className="hover:text-white transition-colors duration-200">CSR NEWS</Link></li>
-          <li><Link href="/contactus" className="hover:text-white transition-colors duration-200">FAQ</Link></li>
           <li><Link href="/careers" className="hover:text-white transition-colors duration-200">Careers</Link></li>
         </ul>
       </div>
@@ -515,7 +515,7 @@ export default function Layout({ children }) {
       </div>
     </div>
     <div className="pt-4 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
-      <p>&copy; 2025 Mercantile Produce Brokers. All rights reserved.</p>
+      <p>&copy; 2025 Mercantile Produce Brokers(Pvt) Ltd. All rights reserved.</p>
       <p className="mt-2 md:mt-0">Developed by: MPBL-IT</p>
     </div>
   </div>

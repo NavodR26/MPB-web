@@ -315,7 +315,7 @@ function HeroSection() {
         transition={{ duration: 0.8 }}
       >
         <h1 className="text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
-          Welcome to Mercantile Produce Brokers
+          Welcome to Mercantile Produce Brokers (Pvt) Ltd
         </h1>
         <motion.p
           className="text-2xl text-gray-200 font-semibold mb-6"
