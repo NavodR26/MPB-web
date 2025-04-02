@@ -315,7 +315,7 @@ function HeroSection() {
         transition={{ duration: 0.8 }}
       >
         <h1 className="text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
-          Welcome to Mercantile Produce Brokers (Pvt) Ltd
+        Mercantile Produce Brokers (Pvt) Ltd
         </h1>
         <motion.p
           className="text-2xl text-gray-200 font-semibold mb-6"
@@ -328,6 +328,39 @@ function HeroSection() {
           </span>
         </motion.p>
       </motion.div>
+
+{/* Compact BSP Floating Button */}
+<div className="fixed bottom-8 right-8 z-50 group">
+  <a 
+    href="https://apps.merctea.lk/bsp/" 
+    target="_blank"
+    rel="noopener noreferrer"
+    className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-green-600 to-green-800 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110"
+    aria-label="Open BSP Portal"
+  >
+    {/* BSP Text with Icon */}
+    <div className="relative">
+      <svg 
+        className="w-6 h-6 text-white absolute -top-3 -left-3 opacity-80" 
+        fill="none" 
+        stroke="currentColor" 
+        viewBox="0 0 24 24"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+      <span className="text-white font-bold text-sm tracking-tight">BSP</span>
+    </div>
+    
+    {/* Pulsing Animation */}
+    <span className="absolute inset-0 border-2 border-green-400 rounded-full animate-ping opacity-0 group-hover:opacity-70 transition-opacity duration-500"></span>
+  </a>
+  
+  {/* Tooltip */}
+  <div className="absolute right-16 bottom-3 bg-gray-900 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap shadow-lg flex items-center">
+    Buyer Service Portal
+    <div className="absolute right-0 top-1/2 transform translate-x-1 -translate-y-1/2 w-1.5 h-1.5 bg-gray-900 rotate-45"></div>
+  </div>
+</div>
 
       {/* Tea Images Grid */}
       <div className="relative z-10 grid grid-cols-3 gap-6 mt-10">
