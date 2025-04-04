@@ -60,6 +60,7 @@
 *.pem
 .vercel
 .env*
+.env
 *.zip
 
 

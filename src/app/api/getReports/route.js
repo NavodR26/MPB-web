@@ -53,7 +53,7 @@
 
 export async function GET() {
   const FOLDER_ID = "1_4zc-LekCBSxSRoSR9KAugwU7Hj7QVHg";
-  const API_KEY = process.env.GOOGLE_API_KEY || "AIzaSyDKU5wNBMl5H1_zUHlj3MzVYcq1UHulgPg";
+  const API_KEY = process.env.GOOGLE_API_KEY;
 
 //   const noCacheHeaders = {
 //     'Cache-Control': 'no-store, max-age=0',
