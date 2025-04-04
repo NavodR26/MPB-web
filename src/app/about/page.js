@@ -65,7 +65,7 @@ const slideLeft = {
 const stats = [
   { label: "Years of Experience", value: 40, icon: "📅", color: "bg-amber-100 text-amber-800" },
   { label: "Tea Auctions Conducted", value: 5000, icon: "🍵", color: "bg-green-100 text-green-800" },
-  { label: "Satisfied Clients", value: 1000, icon: "🤝", color: "bg-blue-100 text-blue-800" }
+  { label: "Success Clients", value: 1000, icon: "🤝", color: "bg-blue-100 text-blue-800" }
 ];
 
 const values = [

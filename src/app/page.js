@@ -357,7 +357,7 @@ function HeroSection() {
   
   {/* Tooltip */}
   <div className="absolute right-16 bottom-3 bg-gray-900 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap shadow-lg flex items-center">
-    Buyer Service Portal
+    Broker Trade Portal
     <div className="absolute right-0 top-1/2 transform translate-x-1 -translate-y-1/2 w-1.5 h-1.5 bg-gray-900 rotate-45"></div>
   </div>
 </div>

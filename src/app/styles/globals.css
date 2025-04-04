@@ -66,3 +66,12 @@ body {
 .animate-spin-slow {
   animation: spin-slow 3s linear infinite;
 }
+
+@layer components {
+  .voice-hint-item {
+    @apply flex items-start text-sm text-gray-600;
+  }
+  .voice-hint-bullet {
+    @apply text-green-600 mr-1;
+  }
+}

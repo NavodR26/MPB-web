@@ -489,7 +489,7 @@ export default function Layout({ children }) {
           <p>133, Jawatta Road</p>
           <p>Colombo 05, Sri Lanka</p>
           <p>Email: info@merctea.lk</p>
-          <p>Phone: 011 234 5678</p>
+          <p>Phone: 0112 581 358</p>
         </address>
       </div>
 
