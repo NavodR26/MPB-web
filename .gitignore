@@ -52,7 +52,7 @@
 
 # Backend build files
 /back_end/build
-
+/04-02-2025-out.zip
 # Other ignored files
 .pnp
 .pnp.*
