@@ -5,6 +5,9 @@ import Calendar from "./calendar";
 import NewsFeed from "./newsfeed";
 import { useEffect, useState, useRef } from "react";
 import TeaTastingExperience from "./TeaTastingExperience";
+import SaleTicker from "./components/SaleTicker"; 
+
+
 
 const images = [
   {
@@ -279,7 +282,7 @@ const TestimonialsSection = () => {
       </div>
     </motion.section>
   );
-};
+}
 
 // Hero Section Component
 function HeroSection() {
@@ -328,6 +331,7 @@ function HeroSection() {
           </span>
         </motion.p>
       </motion.div>
+
 
 {/* Compact BSP Floating Button */}
 <div className="fixed bottom-8 right-8 z-50 group">
@@ -587,8 +591,14 @@ const EnhancedBookingSection = () => {
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+ 
+
       {/* Hero Section */}
       <HeroSection />
+      
+{/* Sale Ticker - placed at the very top of the page */}
+<SaleTicker />
+      
 
       {/* Tea Tasting Experience Section */}
       <TeaTastingExperience id="tea-tasting-experience" />
