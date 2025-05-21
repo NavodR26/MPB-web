@@ -1,3 +1,5 @@
+/* SaleTicker.module.css */
+
 /* Base styles */
 .container {
   --primary-color: #2c5282;
@@ -6,9 +8,9 @@
   --bg-color: #fff;
   --card-bg: #f7fafc;
   --border-color: #e2e8f0;
-  --success-color: #38a169;
-  --error-color: #e53e3e;
-  --neutral-color: #718096;
+  --success-color: #16a34a; /* Vibrant green */
+  --error-color: #dc2626;   /* Vibrant red */
+  --neutral-color: #4b5563; /* Dark gray */
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   --transition: all 0.2s ease;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -73,7 +75,7 @@
   right: 0;
   background-color: white;
   min-width: 180px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   border-radius: 4px;
   z-index: 100;
   border: 1px solid var(--border-color);
@@ -130,8 +132,8 @@
 }
 
 .tickerItem:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .elevation {
@@ -161,19 +163,28 @@
   font-size: 0.9rem;
 }
 
+/* SINGLE ARROW STYLING */
 .change {
-  font-weight: 500;
-  min-width: 80px;
+  font-weight: 600;
+  min-width: 100px;
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
-/* Color states */
+/* Color states with single arrow */
 .up {
   border-left-color: var(--success-color);
 }
 
 .up .change {
   color: var(--success-color);
+}
+
+.up .change::before {
+  content: "";
+  margin-right: 0.3rem;
 }
 
 .down {
@@ -184,12 +195,22 @@
   color: var(--error-color);
 }
 
+.down .change::before {
+  content: "";
+  margin-right: 0.3rem;
+}
+
 .neutral {
   border-left-color: var(--neutral-color);
 }
 
 .neutral .change {
   color: var(--neutral-color);
+}
+
+.neutral .change::before {
+  content: "━";
+  margin-right: 0.3rem;
 }
 
 /* Footer styles */
@@ -344,12 +365,44 @@
 }
 
 .priceChange {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
   margin-top: 0.5rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
-  background: #f0f5ff;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.up .priceChange {
+  background-color: #f0fdf4;
+  color: var(--success-color);
+  border: 1px solid #bbf7d0;
+}
+
+.up .priceChange::before {
+  content: "▲";
+}
+
+.down .priceChange {
+  background-color: #fef2f2;
+  color: var(--error-color);
+  border: 1px solid #fecaca;
+}
+
+.down .priceChange::before {
+  content: "▼";
+}
+
+.neutral .priceChange {
+  background-color: #f3f4f6;
+  color: var(--neutral-color);
+  border: 1px solid #e5e7eb;
+}
+
+.neutral .priceChange::before {
+  content: "━";
 }
 
 .teaDetails {

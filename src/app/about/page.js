@@ -29,7 +29,7 @@ const management = [
   { 
     name: "Mr. Vishana Madawela", 
     role: "Director Tea", 
-    bio: "Specializing in Low Grown teas, Mr. Madawela offers 25 years of expertise in tea tasting, auctioning, and marketing. His deep understanding of regional tea characteristics and market dynamics has significantly contributed to our company's success. Mr. Madawela's career reflects consistent dedication to quality evaluation and market development, making him an invaluable asset in maintaining our standards of excellence in tea brokering.", 
+    bio: "Specializing in low-grown teas, Mr. Madawela brings over 25 years of expertise in tea tasting, auctioning, and marketing. His profound understanding of regional tea characteristics and market dynamics has been instrumental in driving our company's success. With a career marked by unwavering dedication to quality evaluation and market development, Mr. Madawela holds a Diploma in Marketing from SLIM. His expertise and commitment make him an invaluable asset in upholding our standards of excellence in tea brokering.", 
     image: "/management/vishana.jpg" 
   },
   { 
@@ -64,7 +64,7 @@ const slideLeft = {
 
 const stats = [
   { label: "Years of Experience", value: 40, icon: "📅", color: "bg-amber-100 text-amber-800" },
-  { label: "Tea Auctions Conducted", value: 5000, icon: "🍵", color: "bg-green-100 text-green-800" },
+  { label: "Tea Auctions Conducted", value: 2000, icon: "🍵", color: "bg-green-100 text-green-800" },
   { label: "Success Clients", value: 1000, icon: "🤝", color: "bg-blue-100 text-blue-800" }
 ];
 

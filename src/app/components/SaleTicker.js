@@ -25,16 +25,22 @@ export default function SaleTicker() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Formatting helpers
-  const formatPrice = (price) => parseFloat(price || 0).toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  // Formatting helpers - PRESERVES NEGATIVE VALUES
+  const formatPrice = (price) => {
+    const num = parseFloat(price || 0);
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
   
-  const formatDiff = (diff) => Math.abs(parseFloat(diff || 0)).toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  const formatDiff = (diff) => {
+    const num = parseFloat(diff || 0);
+    return num.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  };
   
   const getDiffIndicator = (diff) => {
     const numDiff = parseFloat(diff || 0);
@@ -63,7 +69,7 @@ export default function SaleTicker() {
         lastUpdated: result.lastUpdated
       });
       
-      // Filter and format data
+      // Filter and format data - PRESERVES NEGATIVE VALUES
       const filteredData = result.latestSaleData
         .filter(item => item.TOTAL_AVG !== null)
         .map(item => ({
@@ -119,7 +125,6 @@ export default function SaleTicker() {
     return () => cancelAnimationFrame(animationFrame);
   }, [latestData, isPaused]);
 
-  // Find tea data by elevation
   const getTeaByElevation = (elevation) => {
     return latestData.find(item => item.ELEVATION === elevation);
   };
@@ -150,7 +155,7 @@ export default function SaleTicker() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Public Tea Auction Averages  | Source - CBA (WES)</h2>
+        <h2 className={styles.title}>Public Tea Auction Averages | Source - CBA (WES)</h2>
         <div className={styles.controls}>
           <div className={styles.dropdown}>
             <button 
@@ -312,6 +317,4 @@ export default function SaleTicker() {
     </div>
   );
 }
-
-
 

@@ -1,223 +1,236 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Calendar, ArrowLeft, ArrowRight, Info, Gavel } from "lucide-react";
+import { Calendar, ArrowLeft, ArrowRight, Info, Gavel, X, Clock, Calendar as CalendarIcon, Hammer } from "lucide-react";
 
-// Months data with start day (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
-const months = [
-  { name: "January 2025", days: 31, startDay: 3 },
-  { name: "February 2025", days: 28, startDay: 6 },
-  { name: "March 2025", days: 31, startDay: 6 },
-  { name: "April 2025", days: 30, startDay: 2 },
-  { name: "May 2025", days: 31, startDay: 4 },
-  { name: "June 2025", days: 30, startDay: 0 },
-  { name: "July 2025", days: 31, startDay: 2 },
-  { name: "August 2025", days: 31, startDay: 5 },
-  { name: "September 2025", days: 30, startDay: 1 },
-  { name: "October 2025", days: 31, startDay: 3 },
-  { name: "November 2025", days: 30, startDay: 6 },
-  { name: "December 2025", days: 31, startDay: 1 },
-];
+// Helper function to format date display
+const formatDateDisplay = (dateString) => {
+  if (!dateString) return "N/A";
+  
+  const [month, day, year] = dateString.split('/');
+  const date = new Date(year, month - 1, day);
+  
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+};
 
 export default function AuctionCalendar() {
   const [auctionDates, setAuctionDates] = useState([]);
   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentSaleDetails, setCurrentSaleDetails] = useState(null);
-  const [todayHighlighted, setTodayHighlighted] = useState(false);
+  const [months, setMonths] = useState([]);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [loading, setLoading] = useState(true);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Set initial month to current month
+  // Weekdays starting with Monday
+  const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  const generateMonths = (year) => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const date = new Date(year, i, 1);
+      return {
+        name: date.toLocaleString('default', { month: 'long' }) + " " + year,
+        days: new Date(year, i + 1, 0).getDate(),
+        startDay: (new Date(year, i, 1).getDay() + 6) % 7,
+        monthIndex: i,
+        year: year,
+      };
+    });
+  };
+
   useEffect(() => {
     const today = new Date();
-    const currentMonthIndex = today.getMonth();
-    setSelectedMonthIndex(currentMonthIndex);
+    setYear(today.getFullYear());
+    setMonths(generateMonths(today.getFullYear()));
+    setSelectedMonthIndex(today.getMonth());
   }, []);
 
-  const selectedMonth = months[selectedMonthIndex];
-
-  // Fetch auction dates from the backend
   useEffect(() => {
-    const fetchAuctionDates = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("https://mpb-web-production.up.railway.app/api/auction-dates");
-        if (!response.ok) throw new Error("Failed to fetch data");
-        
+        const response = await fetch(
+          "https://script.google.com/macros/s/AKfycbzUWvmI_jr30CVlwinun1Sxj1aJliEpN-27LucD_Ci-pxC0g2_5Z2w2faYC2gqflsl9/exec"
+        );
         const data = await response.json();
         setAuctionDates(data);
       } catch (error) {
-        console.error("Error fetching auction dates:", error);
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchAuctionDates();
+    fetchData();
   }, []);
 
-  // Highlight today's date if calendar is showing current month/year
-  useEffect(() => {
-    const today = new Date();
-    const isCurrentMonthYear = 
-      selectedMonth.name.includes(today.getFullYear().toString()) && 
-      selectedMonth.name.includes(today.toLocaleString('default', { month: 'long' }));
+  const selectedMonth = months[selectedMonthIndex] || {};
+
+  const hasAuction = (day) => {
+    const formattedDate = `${selectedMonth.monthIndex + 1}/${day}/${selectedMonth.year}`;
+    return auctionDates.some(auction => auction.date === formattedDate);
+  };
+
+  const getAuctionDetails = (day) => {
+    const formattedDate = `${selectedMonth.monthIndex + 1}/${day}/${selectedMonth.year}`;
+    const matchingAuctions = auctionDates.filter(auction => auction.date === formattedDate);
     
-    setTodayHighlighted(isCurrentMonthYear);
-  }, [selectedMonth]);
-
-  // Generate calendar days
-  const daysInMonth = Array.from({ length: selectedMonth.days }, (_, i) => i + 1);
-  const startDay = selectedMonth.startDay;
-
-  // Check if a date has an auction
-  const hasAuction = (date) => {
-    const monthIndex = months.findIndex((m) => m.name === selectedMonth.name) + 1;
-    const formattedDate = `${monthIndex.toString().padStart(2, "0")}/${date.toString().padStart(2, "0")}/2025`;
-    return auctionDates.some((auction) => auction.date === formattedDate);
+    // Group by saleNo since a sale might have multiple days
+    const grouped = {};
+    matchingAuctions.forEach(auction => {
+      if (!grouped[auction.saleNo]) {
+        grouped[auction.saleNo] = {
+          saleNo: auction.saleNo,
+          saleYear: auction.saleYear,
+          days: [],
+          catalogueDate: auction.catalogueDate
+        };
+      }
+      grouped[auction.saleNo].days.push({
+        date: auction.date,
+        dayType: auction.dayType
+      });
+    });
+    
+    return Object.values(grouped);
   };
 
-  // Check if a date is today
-  const isToday = (date) => {
-    if (!todayHighlighted) return false;
-    const today = new Date();
-    return date === today.getDate() && 
-           selectedMonth.name.includes(today.getFullYear().toString()) &&
-           selectedMonth.name.includes(today.toLocaleString('default', { month: 'long' }));
+  const getDayOfWeek = (day) => {
+    return (new Date(selectedMonth.year, selectedMonth.monthIndex, day).getDay() + 6) % 7;
   };
 
-  // Get auction details for a date
-  const getAuctionDetails = (date) => {
-    const monthIndex = months.findIndex((m) => m.name === selectedMonth.name) + 1;
-    const formattedDate = `${monthIndex.toString().padStart(2, "0")}/${date.toString().padStart(2, "0")}/2025`;
-    return auctionDates.filter((auction) => auction.date === formattedDate);
+  const navigateMonth = (direction) => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      if (direction === "prev") {
+        if (selectedMonthIndex > 0) {
+          setSelectedMonthIndex((prev) => prev - 1);
+        } else {
+          const newYear = year - 1;
+          setYear(newYear);
+          setMonths(generateMonths(newYear));
+          setSelectedMonthIndex(11);
+        }
+      } else {
+        if (selectedMonthIndex < 11) {
+          setSelectedMonthIndex((prev) => prev + 1);
+        } else {
+          const newYear = year + 1;
+          setYear(newYear);
+          setMonths(generateMonths(newYear));
+          setSelectedMonthIndex(0);
+        }
+      }
+      setIsAnimating(false);
+    }, 200);
   };
 
-  // Handle date click
-  const handleDateClick = (date) => {
-    const auctionDetails = getAuctionDetails(date);
-    if (auctionDetails.length > 0) {
-      setSelectedDate(date);
-      setCurrentSaleDetails(auctionDetails);
-    }
-  };
-
-  // Navigate to previous month
-  const prevMonth = () => {
-    if (selectedMonthIndex > 0) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setSelectedMonthIndex(selectedMonthIndex - 1);
-        setIsAnimating(false);
-      }, 200);
-    }
-  };
-
-  // Navigate to next month
-  const nextMonth = () => {
-    if (selectedMonthIndex < months.length - 1) {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setSelectedMonthIndex(selectedMonthIndex + 1);
-        setIsAnimating(false);
-      }, 200);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 max-w-3xl mx-auto transition-colors duration-300">
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-        <div className="flex items-center">
-          <Calendar className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Auction Calendar</h2>
-        </div>
-        
+    <div className="bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 p-6 rounded-xl shadow-lg max-w-3xl mx-auto border border-gray-200 dark:border-gray-700">
+      {/* Calendar Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold flex items-center text-gray-800 dark:text-white">
+          <Calendar className="mr-2 text-green-600" /> Auction Calendar
+        </h2>
         <div className="flex items-center space-x-4">
-          <button 
-            onClick={prevMonth}
-            disabled={selectedMonthIndex === 0}
-            className={`p-2 rounded-full ${
-              selectedMonthIndex === 0 
-                ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
-                : 'text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-gray-700'
-            }`}
+          <button
+            onClick={() => navigateMonth("prev")}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-green-600 dark:text-green-400 transition-colors duration-200"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft />
           </button>
-          
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 w-40 text-center">
+          <h3 className="text-xl font-semibold w-44 text-center bg-white dark:bg-gray-800 py-1 px-2 rounded-lg shadow-sm">
             {selectedMonth.name}
           </h3>
-          
-          <button 
-            onClick={nextMonth}
-            disabled={selectedMonthIndex === months.length - 1}
-            className={`p-2 rounded-full ${
-              selectedMonthIndex === months.length - 1 
-                ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed' 
-                : 'text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-gray-700'
-            }`}
+          <button
+            onClick={() => navigateMonth("next")}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-green-600 dark:text-green-400 transition-colors duration-200"
           >
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight />
           </button>
         </div>
       </div>
 
       {/* Calendar Grid */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        key={selectedMonthIndex}
-        className={`${isAnimating ? 'opacity-70' : 'opacity-100'}`}
+      <motion.div
+        key={`${selectedMonthIndex}-${year}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className={`${isAnimating ? "opacity-70" : "opacity-100"} bg-white dark:bg-gray-800 rounded-lg shadow-md p-4`}
       >
-        <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
-          {/* Weekday Headers */}
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, index) => (
-            <div 
-              key={day} 
-              className={`text-center text-sm sm:text-base font-bold py-2 ${
-                index === 0 || index === 6 
-                  ? 'text-red-500 dark:text-red-400' 
-                  : 'text-gray-700 dark:text-gray-300'
+        <div className="grid grid-cols-7 gap-2 mb-4">
+          {weekdays.map((day, index) => (
+            <div
+              key={day}
+              className={`text-center font-bold py-2 rounded ${
+                index === 6 
+                  ? "text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20" 
+                  : "text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/50"
               }`}
             >
               {day}
             </div>
           ))}
 
-          {/* Empty Days for Start of Month */}
-          {Array.from({ length: startDay }).map((_, index) => (
-            <div key={`empty-${index}`} className="text-center p-2 sm:p-3 rounded-lg"></div>
+          {Array.from({ length: selectedMonth.startDay }).map((_, i) => (
+            <div key={`empty-${i}`} className="h-12 bg-gray-50 dark:bg-gray-800 rounded" />
           ))}
 
-          {/* Calendar Days */}
-          {daysInMonth.map((day) => {
-            const auction = hasAuction(day);
-            const today = isToday(day);
-            
+          {Array.from({ length: selectedMonth.days }, (_, i) => i + 1).map((day) => {
+            const isAuctionDay = hasAuction(day);
+            const isToday =
+              new Date().getDate() === day &&
+              new Date().getMonth() === selectedMonth.monthIndex &&
+              new Date().getFullYear() === selectedMonth.year;
+            const dayOfWeek = getDayOfWeek(day);
+            const isSunday = dayOfWeek === 6;
+
             return (
               <motion.div
                 key={day}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`relative text-center p-2 sm:p-3 rounded-lg cursor-pointer transition-all duration-200 border ${
-                  auction 
-                    ? 'border-amber-300 dark:border-amber-600 hover:border-amber-500 dark:hover:border-amber-400' 
-                    : 'border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
-                } ${
-                  today ? 'ring-2 ring-blue-500 dark:ring-blue-400 ring-offset-2 dark:ring-offset-gray-800' : ''
-                }`}
-                onClick={() => handleDateClick(day)}
+                onClick={() => {
+                  const details = getAuctionDetails(day);
+                  if (details.length) {
+                    setSelectedDate(day);
+                    setCurrentSaleDetails(details);
+                  }
+                }}
+                className={`relative h-12 flex items-center justify-center rounded-lg cursor-pointer transition-all border ${
+                  isAuctionDay
+                    ? "border-amber-300 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/30 shadow-md"
+                    : isSunday
+                    ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40"
+                    : "border-transparent bg-gray-50 dark:bg-gray-700/30 hover:bg-gray-100 dark:hover:bg-gray-700/60"
+                } ${isToday ? "ring-2 ring-blue-500 dark:ring-blue-400" : ""}`}
               >
-                <span className={`text-sm sm:text-base ${
-                  auction ? 'font-semibold text-amber-700 dark:text-amber-300' : 
-                  today ? 'font-semibold text-blue-600 dark:text-blue-300' :
-                  'text-gray-700 dark:text-gray-200'
-                }`}>
+                <span
+                  className={`${
+                    isAuctionDay 
+                      ? "font-bold text-amber-700 dark:text-amber-300" 
+                      : isSunday
+                      ? "font-medium text-red-600 dark:text-red-400"
+                      : "text-gray-700 dark:text-gray-300"
+                  }`}
+                >
                   {day}
                 </span>
-                
-                {auction && (
-                  <div className="absolute bottom-0 left-0 right-0 mx-auto flex justify-center">
-                    <Gavel className="h-4 w-4 text-amber-700 dark:text-amber-400" />
+                {isAuctionDay && (
+                  <div className="absolute -top-1 -right-1 bg-amber-500 rounded-full p-1 shadow-lg">
+                    <Gavel className="h-3 w-3 text-white" />
                   </div>
                 )}
               </motion.div>
@@ -226,69 +239,121 @@ export default function AuctionCalendar() {
         </div>
       </motion.div>
 
-      {/* Calendar Legend */}
-      <div className="flex flex-wrap items-center justify-center mt-4 mb-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400 gap-2 sm:gap-4">
+      {/* Legend */}
+      <div className="flex justify-center space-x-6 text-sm mt-4 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
         <div className="flex items-center">
-          <Gavel className="h-3 w-3 text-amber-700 dark:text-amber-400 mr-2" />
-          <span>Auction Day</span>
-        </div>
-        {todayHighlighted && (
-          <div className="flex items-center">
-            <div className="h-3 w-3 border border-blue-500 dark:border-blue-400 rounded-full mr-2"></div>
-            <span>Today</span>
+          <div className="bg-amber-500 rounded-full p-1 mr-2">
+            <Gavel className="h-4 w-4 text-white" />
           </div>
-        )}
+          <span className="text-gray-700 dark:text-gray-300">Auction Day</span>
+        </div>
+        <div className="flex items-center">
+          <div className="h-4 w-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded mr-2"></div>
+          <span className="text-gray-700 dark:text-gray-300">Sunday</span>
+        </div>
+        <div className="flex items-center">
+          <div className="h-4 w-4 rounded border-2 border-blue-500 dark:border-blue-400 mr-2"></div>
+          <span className="text-gray-700 dark:text-gray-300">Today</span>
+        </div>
       </div>
 
-      {/* Sale Details Modal */}
-      {selectedDate && currentSaleDetails && (
-        <motion.div 
+      {/* Auction Details Modal */}
+      {currentSaleDetails && (
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          onClick={() => setCurrentSaleDetails(null)}
         >
-          <motion.div 
-            initial={{ scale: 0.9, y: 20 }}
-            animate={{ scale: 1, y: 0 }}
-            className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-2xl border border-gray-300 dark:border-gray-600 max-w-md w-full"
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 20, opacity: 0 }}
+            transition={{ type: "spring", damping: 25 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-md w-full overflow-hidden border border-gray-200 dark:border-gray-700 relative"
           >
-            <div className="flex items-center mb-4">
-              <Info className="w-6 h-6 text-green-600 dark:text-green-400 mr-2" />
-              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-                Auction Details
-              </h3>
-            </div>
-            
-            <div className="bg-green-50 dark:bg-green-900 p-4 rounded-lg mb-4">
-              <p className="text-green-800 dark:text-green-200 font-semibold">
-                {selectedMonth.name.split(" ")[0]} {selectedDate}, {selectedMonth.name.split(" ")[1]}
-              </p>
-              <p className="text-green-700 dark:text-green-300 text-lg font-bold mt-1">
-                Sale #{currentSaleDetails[0].saleNo} - {currentSaleDetails[0].title}
-              </p>
-            </div>
-            
-            {currentSaleDetails.length > 1 && (
-              <div className="mb-4">
-                <p className="text-gray-600 dark:text-gray-400 italic">
-                  This is a multi-day auction event
-                </p>
+            {/* Close Button */}
+            <button
+              onClick={() => setCurrentSaleDetails(null)}
+              className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Header */}
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 dark:from-emerald-600 dark:to-teal-600 p-5 text-white">
+              <div className="flex items-center">
+                
+                <div>
+                  <h3 className="text-xl font-bold">Auction Details</h3>
+                  <p className="text-sm opacity-90">
+                    {selectedMonth.name.split(" ")[0]} {selectedDate}, {selectedMonth.year}
+                  </p>
+                </div>
               </div>
-            )}
-            
-            <div className="flex justify-end mt-6">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setSelectedDate(null);
-                  setCurrentSaleDetails(null);
-                }}
-                className="bg-green-600 dark:bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-700 dark:hover:bg-green-600 transition duration-300 flex items-center"
+            </div>
+
+            {/* Content */}
+            <div className="p-5 space-y-4">
+              {currentSaleDetails.map((sale, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="bg-gray-50/50 dark:bg-gray-700/30 p-4 rounded-lg border border-gray-200 dark:border-gray-700"
+                >
+                  {/* Sale Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <span className="inline-block bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium py-1 px-2 rounded-md mb-1">
+                        Sale #{sale.saleNo} • {sale.saleYear}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Auction Days */}
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <Clock className="flex-shrink-0 mt-0.5 mr-2 text-gray-500 dark:text-gray-400" size={16} />
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Auction Days</p>
+                        <ul className="space-y-1">
+                          {sale.days.map((day, idx) => (
+                            <li key={idx} className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                              {day.dayType}: {formatDateDisplay(day.date)}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    {/* Catalogue Closing */}
+                    <div className="flex items-start">
+                      <CalendarIcon className="flex-shrink-0 mt-0.5 mr-2 text-gray-500 dark:text-gray-400" size={16} />
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Catalogue Closing</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {formatDateDisplay(sale.catalogueDate)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 pb-5">
+              <button
+                onClick={() => setCurrentSaleDetails(null)}
+                className="w-full py-2.5 px-4 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg text-sm font-medium transition-colors flex items-center justify-center"
               >
-                Close
-              </motion.button>
+                Close Details
+              </button>
             </div>
           </motion.div>
         </motion.div>

@@ -988,7 +988,7 @@ export default function Layout({ children }) {
           <p>133, Jawatta Road</p>
           <p>Colombo 05, Sri Lanka</p>
           <p>Email: info@merctea.lk</p>
-          <p>Phone: 011 234 5678</p>
+          <p>Phone: 0112 581 358</p>
         </address>
       </div>
 
@@ -1015,15 +1015,10 @@ export default function Layout({ children }) {
 
     {/* Quick Links */}
     <div className="grid grid-cols-2 md:grid-cols-6 gap-4 py-6 border-t border-gray-700">
-      <Link href="/admin/login" className="text-gray-300 hover:text-green-400 transition-colors duration-300 flex items-center gap-1">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-        </svg>
-        Admin
-      </Link>
       <Link href="/gallery" className="text-gray-300 hover:text-green-400 transition-colors duration-300">Gallery</Link>
       <Link href="/csr" className="text-gray-300 hover:text-green-400 transition-colors duration-300">CSR News</Link>
       <Link href="/careers" className="text-gray-300 hover:text-green-400 transition-colors duration-300">Careers</Link>
+      <Link href="/links" className="text-gray-300 hover:text-green-400 transition-colors duration-300">Statistics</Link>
       <Link href="/reports" className="text-gray-300 hover:text-green-400 transition-colors duration-300">Market Reports</Link>
       <Link href="/contactus" className="text-gray-300 hover:text-green-400 transition-colors duration-300">Contacts</Link>
     </div>
